@@ -1,6 +1,6 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
-require_relative './lib/bookmark'
+require './lib/bookmark'
 
 class BookmarkManager < Sinatra::Base
   
@@ -9,9 +9,20 @@ class BookmarkManager < Sinatra::Base
   end
 
   get '/' do
-    p ENV
+    ENV
     @bookmarks = Bookmark.all
     erb :index
+  end
+
+  get '/add' do
+    erb :add
+  end
+
+  post '/' do
+    # newbookmark = params[:add_bookmark]
+    # @bookmarks = Bookmark.new
+    Bookmark.create(add_bookmark: params[:add_bookmark])
+    redirect '/'
   end
 
   run! if app_file == $0

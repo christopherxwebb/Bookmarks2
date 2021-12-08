@@ -28,3 +28,9 @@ rspec
 ### To run linting:
 ```
 rubocop
+
+USER STORIES
+
+As a user,
+So I can access my favourite sites,
+I would like to be able add new bookmarks.

@@ -1,14 +1,27 @@
-require_relative './database_connection'
+require 'pg'
+# require_relative './database_connection'
+# require './app.rb'
 
 class Bookmark
   def self.all
     if ENV['ENVIRONMENT'] == 'test'
-      DatabaseConnection.setup('bookmark_manager_test')
+      connection = PG.connect(dbname: 'bookmark_manager_test')
     else
-      DatabaseConnection.setup('bookmark_manager')
+      connection = PG.connect(dbname: 'bookmark_manager')
     end
-    result = DatabaseConnection.query("SELECT * FROM bookmarks;")
-    result.map{|bookmark| bookmark["url"]}
+    result = connection.exec("SELECT * FROM bookmarks")
+    result.map{|bookmark| bookmark['url']}
   end
+
+  def self.create(add_bookmark:)
+    if ENV['ENVIRONMENT'] == 'test'
+      connection = PG.connect(dbname: 'bookmark_manager_test')
+    else
+      connection = PG.connect(dbname: 'bookmark_manager')
+    end
+    connection.exec("INSERT INTO bookmarks (url) VALUES('#{add_bookmark}')")
+  end
+
 end
+
 
